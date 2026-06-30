@@ -3,154 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MindForge — Working Memory Trainer</title>
+  <title>The Hollowed Keep</title>
   <link rel="stylesheet" href="styles.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#x1F3F0;</text></svg>">
 </head>
 <body>
-  <div id="app">
-    <header>
-      <h1 id="header-title" onclick="showHome()">MindForge</h1>
-      <p id="header-subtitle">Train your working memory</p>
-    </header>
 
-    <main id="home" class="screen active">
-      <div class="stats-bar">
-        <div class="stat">
-          <span class="stat-value" id="total-sessions">0</span>
-          <span class="stat-label">Sessions</span>
+  <div class="crt-overlay"></div>
+
+  <div id="boot-screen">
+    <div id="boot-text"></div>
+    <div id="boot-prompt" class="hidden">
+      <span class="prompt-char">&gt; </span>
+      <input type="text" id="boot-input" spellcheck="false" autocomplete="off" autocapitalize="off">
+    </div>
+  </div>
+
+  <div id="game-container" class="hidden">
+
+    <header id="ascii-header"><pre id="castle-art"></pre></header>
+
+    <div id="game-layout">
+
+      <aside id="left-panel">
+        <div class="panel-section" id="stats-panel">
+          <div class="panel-title">[ STATUS ]</div>
+          <div id="stats-content"></div>
         </div>
-        <div class="stat">
-          <span class="stat-value" id="best-streak">0</span>
-          <span class="stat-label">Best Streak</span>
+        <div class="panel-section" id="inventory-panel">
+          <div class="panel-title">[ INVENTORY ]</div>
+          <div id="inventory-content"></div>
         </div>
-        <div class="stat">
-          <span class="stat-value" id="today-time">0m</span>
-          <span class="stat-label">Today</span>
+        <div class="panel-section" id="map-panel">
+          <div class="panel-title">[ MAP ]</div>
+          <pre id="map-content"></pre>
         </div>
-      </div>
+        <div class="panel-section" id="quests-panel">
+          <div class="panel-title">[ QUESTS ]</div>
+          <div id="quests-content"></div>
+        </div>
+      </aside>
 
-      <div class="game-grid">
-        <button class="game-card" onclick="startGame('sequence')">
-          <div class="game-icon">🧩</div>
-          <div class="game-info">
-            <h3>Sequence Memory</h3>
-            <p>Remember the pattern as it grows</p>
-          </div>
-          <div class="game-best" id="best-sequence">—</div>
-        </button>
+      <main id="center-panel">
+        <div id="output" role="log" aria-live="polite"></div>
+        <div id="input-area">
+          <span class="prompt-char">&gt; </span>
+          <input type="text" id="command-input" spellcheck="false" autocomplete="off" autocapitalize="off" placeholder="enter command...">
+        </div>
+      </main>
 
-        <button class="game-card" onclick="startGame('number')">
-          <div class="game-icon">🔢</div>
-          <div class="game-info">
-            <h3>Number Memory</h3>
-            <p>Recall increasingly long numbers</p>
-          </div>
-          <div class="game-best" id="best-number">—</div>
-        </button>
+      <aside id="right-panel">
+        <div class="panel-section" id="chronicle-panel">
+          <div class="panel-title">[ ADVENTURER'S CHRONICLE ]</div>
+          <div id="chronicle-content"></div>
+        </div>
+        <div class="panel-section" id="runewall-panel">
+          <div class="panel-title">[ RUNE WALL ]</div>
+          <div id="runewall-content"></div>
+        </div>
+        <div class="panel-section" id="server-panel">
+          <div class="panel-title">[ SERVER ]</div>
+          <div id="server-content"></div>
+        </div>
+      </aside>
 
-        <button class="game-card" onclick="startGame('visual')">
-          <div class="game-icon">👁️</div>
-          <div class="game-info">
-            <h3>Visual Memory</h3>
-            <p>Remember highlighted tiles</p>
-          </div>
-          <div class="game-best" id="best-visual">—</div>
-        </button>
-
-        <button class="game-card" onclick="startGame('nback')">
-          <div class="game-icon">🧠</div>
-          <div class="game-info">
-            <h3>N-Back</h3>
-            <p>Was this the same as N steps ago?</p>
-          </div>
-          <div class="game-best" id="best-nback">—</div>
-        </button>
-      </div>
-    </main>
-
-    <!-- Sequence Memory Game -->
-    <div id="sequence-screen" class="screen">
-      <div class="game-header">
-        <h2>Sequence Memory</h2>
-        <div class="level-display">Level <span id="seq-level">1</span></div>
-      </div>
-      <div class="game-status" id="seq-status">Watch the sequence</div>
-      <div class="grid-3x3" id="seq-grid"></div>
-      <div class="game-actions">
-        <button class="btn btn-secondary" onclick="showHome()">Quit</button>
-      </div>
     </div>
 
-    <!-- Number Memory Game -->
-    <div id="number-screen" class="screen">
-      <div class="game-header">
-        <h2>Number Memory</h2>
-        <div class="level-display">Level <span id="num-level">1</span></div>
-      </div>
-      <div id="num-display" class="number-display"></div>
-      <div id="num-input-area" class="number-input-area hidden">
-        <input type="number" id="num-input" class="num-input" placeholder="Enter the number" inputmode="numeric" autocomplete="off">
-        <button class="btn btn-primary" onclick="checkNumber()">Submit</button>
-      </div>
-      <div id="num-result" class="number-result hidden"></div>
-      <div class="game-actions">
-        <button class="btn btn-secondary" onclick="showHome()">Quit</button>
-      </div>
-    </div>
+    <footer id="game-footer">
+      <span id="footer-left">The Hollowed Keep v2.17 &middot; Est. 993 A.D.</span>
+      <span id="footer-right">hollowkeep.net:6660</span>
+    </footer>
 
-    <!-- Visual Memory Game -->
-    <div id="visual-screen" class="screen">
-      <div class="game-header">
-        <h2>Visual Memory</h2>
-        <div class="level-display">Level <span id="vis-level">1</span></div>
-      </div>
-      <div class="game-status" id="vis-status">Memorize the tiles</div>
-      <div id="vis-grid" class="vis-grid"></div>
-      <div class="game-actions">
-        <button class="btn btn-secondary" onclick="showHome()">Quit</button>
-      </div>
-    </div>
+  </div>
 
-    <!-- N-Back Game -->
-    <div id="nback-screen" class="screen">
-      <div class="game-header">
-        <h2>N-Back</h2>
-        <div class="level-display"><span id="nb-n">2</span>-Back</div>
-      </div>
-      <div class="nback-progress">
-        <span id="nb-round">0</span> / <span id="nb-total">20</span>
-      </div>
-      <div class="nback-display">
-        <div class="nback-grid" id="nb-grid"></div>
-      </div>
-      <div class="nback-controls">
-        <button class="btn btn-match" id="nb-match-btn" onclick="nbackResponse(true)">Match</button>
-        <button class="btn btn-no-match" id="nb-skip-btn" onclick="nbackResponse(false)">No Match</button>
-      </div>
-      <div class="nback-score">
-        Accuracy: <span id="nb-accuracy">—</span>
-      </div>
-      <div class="game-actions">
-        <button class="btn btn-secondary" onclick="showHome()">Quit</button>
-      </div>
-    </div>
-
-    <!-- Results Screen -->
-    <div id="results-screen" class="screen">
-      <div class="results-container">
-        <div class="results-icon" id="results-icon">🎯</div>
-        <h2 id="results-title">Nice Work!</h2>
-        <div class="results-score">
-          <span class="results-label">Score</span>
-          <span class="results-value" id="results-value">0</span>
-        </div>
-        <div class="results-detail" id="results-detail"></div>
-        <div class="results-actions">
-          <button class="btn btn-primary" id="results-retry">Try Again</button>
-          <button class="btn btn-secondary" onclick="showHome()">Home</button>
-        </div>
-      </div>
-    </div>
+  <div id="mobile-tabs" class="hidden">
+    <button class="tab-btn active" data-panel="center-panel">Game</button>
+    <button class="tab-btn" data-panel="left-panel">Status</button>
+    <button class="tab-btn" data-panel="right-panel">Chronicle</button>
   </div>
 
   <script src="app.js"></script>
